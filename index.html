@@ -1,0 +1,99 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+		<link rel="icon" href="./public/heart.svg" />
+        <link rel="stylesheet" href="./styles.css"></link>
+        <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Satisfy"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+        <div class="main-container">
+            <div class="container">
+                <div class="profile-card-container">
+                    <img class="profile-card-image" src="https://cdn.discordapp.com/attachments/1130972374368522301/1204157702499213393/kadraapfp.png?ex=65d3b640&is=65c14140&hm=6247c212ce72d33b5545144e42beb0b139d995818d89111687c2e62e0f22a640&" />
+                    <p class="profile-card-name">emin</p>
+                </div>
+                <img class="middle-heart" src="./public/heart.svg" alt="heart" />
+                <div class="profile-card-container">
+                    <img class="profile-card-image" src="https://cdn.discordapp.com/attachments/1130972374368522301/1204156930906529852/16439165a5076c94bea6b32b4e448ba8.jpg?ex=65d3b588&is=65c14088&hm=60b1fb2f5b3db7a31bf7a71dab42f6644d15406efba940bb109be0283b11f268&" />
+                    <p class="profile-card-name">digger</p>
+                </div>
+            </div>
+            <p class="secondary-text">have been together for</p>
+            <h1 class="main-text" id="formattedTimeDisplay">
+                0 years, 0 days
+            </h1>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress" id="progress"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const relationshipStart = 1684173600;
+
+            function updateProgress(progress) {
+                const progressLine = document.getElementById('progress');
+                progressLine.style.setProperty('--progress', `${progress}%`);
+            }
+
+            function updateFormattedTime(str) {
+                const timeDisplay = document.getElementById(
+                    'formattedTimeDisplay'
+                );
+                timeDisplay.innerText = str;
+            }
+
+            function yearsBetweenDates(t1, t2) {
+                const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25;
+                const date1 = new Date(t1 * 1000);
+                const date2 = new Date(t2 * 1000);
+
+                const differenceMilliseconds = Math.abs(date2 - date1);
+                const yearsPassed =
+                    differenceMilliseconds / millisecondsPerYear;
+
+                return Math.floor(yearsPassed);
+            }
+
+            function daysBetweenDates(t1, t2) {
+                const millisecondsPerYear = 1000 * 60 * 60 * 24 * 365.25;
+                const date1 = new Date(t1 * 1000);
+                const date2 = new Date(t2 * 1000);
+
+                const differenceMilliseconds = Math.abs(date2 - date1);
+                const yearsPassed =
+                    differenceMilliseconds / millisecondsPerYear;
+
+                return Math.round(yearsPassed * 365);
+            }
+
+            function getFormattedTimeDifference(unixTimestamp) {
+                const currentTime = new Date().getTime();
+                const difference = currentTime - unixTimestamp * 1000;
+
+                const millisecondsInDay = 1000 * 60 * 60 * 24;
+                const millisecondsInYear = millisecondsInDay * 365;
+
+                const years = Math.floor(difference / millisecondsInYear);
+                const remainingMilliseconds = difference % millisecondsInYear;
+                const days = Math.floor(
+                    remainingMilliseconds / millisecondsInDay
+                );
+
+                if (years === 0) return `${days} days`;
+
+                return `${years} years, ${days} days`;
+            }
+
+            const now = new Date().getTime() / 1000;
+            const years = yearsBetweenDates(now, relationshipStart);
+            const days = daysBetweenDates(now, relationshipStart) - years * 365;
+
+            updateProgress((days / 365) * 100);
+            updateFormattedTime(getFormattedTimeDifference(relationshipStart));
+        </script>
+    </body>
+</html>
